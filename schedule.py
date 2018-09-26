@@ -1,3 +1,4 @@
+#!/Users/azuev/projects/weekly_report/env/bin/python3
 # -*- coding: utf-8 -*-
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 import logging
