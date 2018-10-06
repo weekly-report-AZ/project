@@ -36,7 +36,7 @@ def get_report(analytics, url):
                                             {
                                                 "dimensionName": "ga:pagePath",
                                                 "operator": "REGEXP",
-                                                "expressions": ["url"]
+                                                "expressions": [url]
                                             }
                                         ]
                                 },
@@ -55,24 +55,26 @@ def get_report(analytics, url):
                 ]
          }
          ).execute()
-    '''обработка ошибок'''
+        '''обработка ошибок'''
     except TypeError as error:
         print('There was an error in constructing your query : %s' % error)
 
     except HttpError as error:
         print('There was an API error : %s : %s' % (error.resp.status, error.resp.reason))
 
-def print_response(response):
-    '''вывод количества органического трафика из Google за неделю  на страницы с вхождением ключа'''
-    print(response['reports'][0]['data']['totals'][0]['values'][0])
-    '''сделать исключение на выход за индекс IndexError и неверный ключ KeyError'''
+#def print_response(response):
+#    '''вывод количества органического трафика из Google за неделю  на страницы с вхождением ключа'''
+#    k = response['reports'][0]['data']['totals'][0]['values'][0]
+#    return k
+#    '''сделать исключение на выход за индекс IndexError и неверный ключ KeyError'''
 
 
-def main():
+def main_ga(url):
     analytics = initialize_analyticsreporting()
-    response = get_report(analytics, 'keune')
-    print_response(response)
-
+    response = get_report(analytics, url)
+    k = response['reports'][0]['data']['totals'][0]['values'][0]
+    return k
 
 if __name__ == '__main__':
-    main()
+    l = main_ga('keune')
+    print(l)
