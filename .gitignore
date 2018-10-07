@@ -3,5 +3,6 @@ settings.py
 ym_const.py
 .DS_Store
 *.log
+*.csv
 __pycache__/
 /env/*

@@ -72,7 +72,7 @@ def get_report(analytics, url):
 def main_ga(url):
     analytics = initialize_analyticsreporting()
     response = get_report(analytics, url)
-    k = response['reports'][0]['data']['totals'][0]['values'][0]
+    k = int(response['reports'][0]['data']['totals'][0]['values'][0])
     return k
 
 if __name__ == '__main__':
