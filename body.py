@@ -1,8 +1,10 @@
+#!/Users/azuev/projects/weekly_report/env/bin/python3
 # -*- coding: utf-8 -*-
 import csv
 import datetime
 import request_ga
 import request_ym
+import os
 
 # запись в переменную сегодняшней даты в формате год/месяц/день
 begin = str(datetime.datetime.today().strftime('%d.%m.%Y %H:%M'))
@@ -29,13 +31,23 @@ with open('brand.txt', 'r', encoding='utf-8') as r:
 print(fields)
 print(dict_res_y)
 print(dict_res_g)
-with open('report_g.csv', 'a', encoding='utf-8', newline='') as f:
-    writer = csv.DictWriter(f, fields, delimiter=';')
-    writer.writeheader()
-    writer.writerow(dict_res_g)
-with open('report_y.csv', 'a', encoding='utf-8', newline='') as f:
-    writer = csv.DictWriter(f, fields, delimiter=';')
-    writer.writeheader()
-    writer.writerow(dict_res_y)
+if os.path.isfile('/Users/azuev/projects/weekly_report/report_g.csv') == False:
+    with open('report_g.csv', 'a', encoding='utf-8', newline='') as f:
+        writer = csv.DictWriter(f, fields, delimiter=';')
+        writer.writeheader()
+        writer.writerow(dict_res_g)
+else:
+    with open('report_g.csv', 'a', encoding='utf-8', newline='') as f:
+        writer = csv.DictWriter(f, fields, delimiter=';')
+        writer.writerow(dict_res_g)
+if os.path.isfile('/Users/azuev/projects/weekly_report/report_y.csv') == False:
+    with open('report_y.csv', 'a', encoding='utf-8', newline='') as f:
+        writer = csv.DictWriter(f, fields, delimiter=';')
+        writer.writeheader()
+        writer.writerow(dict_res_y)
+else:
+    with open('report_y.csv', 'a', encoding='utf-8', newline='') as f:
+        writer = csv.DictWriter(f, fields, delimiter=';')
+        writer.writerow(dict_res_y)
 end = str(datetime.datetime.today().strftime('%d.%m.%Y %H:%M'))
 print(end)

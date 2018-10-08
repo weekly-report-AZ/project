@@ -61,11 +61,6 @@ def get_report(analytics, url):
 
     except HttpError as error:
         print('There was an API error : %s : %s' % (error.resp.status, error.resp.reason))
-
-#def print_response(response):
-#    '''вывод количества органического трафика из Google за неделю  на страницы с вхождением ключа'''
-#    k = response['reports'][0]['data']['totals'][0]['values'][0]
-#    return k
 #    '''сделать исключение на выход за индекс IndexError и неверный ключ KeyError'''
 
 
