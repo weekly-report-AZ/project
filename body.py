@@ -1,14 +1,12 @@
 #!/Users/azuev/projects/weekly_report/env/bin/python3
 # -*- coding: utf-8 -*-
+from datetime import datetime
 import csv
-import datetime
+import os
 import request_ga
 import request_ym
-import os
 
-# запись в переменную сегодняшней даты в формате год/месяц/день
-begin = str(datetime.datetime.today().strftime('%d.%m.%Y %H:%M'))
-print(begin)
+begin = datetime.today()
 dict_res_y = {'date': begin}
 dict_res_g = {'date': begin}
 fields = ['date']
@@ -49,5 +47,6 @@ else:
     with open('report_y.csv', 'a', encoding='utf-8', newline='') as f:
         writer = csv.DictWriter(f, fields, delimiter=';')
         writer.writerow(dict_res_y)
-end = str(datetime.datetime.today().strftime('%d.%m.%Y %H:%M'))
-print(end)
+end = datetime.today()
+delta = end - begin
+print('время работы скрипта {0} минут {1} секунд'.format(delta.seconds // 60, delta.seconds % 60))
