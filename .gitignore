@@ -2,7 +2,7 @@ weekly-report-218310-8e5d9c875c02.json
 settings.py
 ym_const.py
 schedule.py
-mail.py
+mail2.py
 schedule.crontab
 .DS_Store
 *.log
