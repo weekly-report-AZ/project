@@ -1,29 +1,47 @@
-import smtplib
-from email.mime.text import MIMEText
-from email.mime.base import MIMEBase
-from email.header import Header
-from email import encoders
-
-def send_mail( send_sender, send_receiver, subject, body, files=[], server, username, password):
-	mail_sender ='novartval@mail.ru'
-	mail_receiver ='novartval@mail.ru'
-	username ='novartval@mail.ru'
-	password ='1234'
-	server = smtplib.SMTP('smtp.mail.ru:587')
-	subject = u'Тестовый email от '# + mail_sendler
-	body =u'ya = Hello, Bro)' 'ga = Hello, sister)'
-
-	mag = MIMEText (body, 'plain','utf-8')
-
-for f in files:
-    part = MIMEBase('application', "octet-stream")
-    part.set_payload( open(f,"rb").read() )
-    encoders.encode_base64(part)
-    part.add_header('Content-Disposition', 'attachment; filename="{0}"'.format(os.path.basename(f)))
-    msg.attach(part)
+import smtplib                                              
+import os                                                   
+import mimetypes                                            
+from email import encoders                                  
+from email.mime.base import MIMEBase                       
+from email.mime.text import MIMEText                                                               
+from email.mime.multipart import MIMEMultipart             
 
 
-server.starttls()
-server.ehlo()
-server.login(username, password)
-server.sendmail(mail_sender, mail_receiver, mag.as_string())
+addr_from = "novartval@mail.ru"
+addr_to   = "novartval@mail.ru"                   
+password  = "12345"                                  
+
+msg = MIMEMultipart()                          
+msg['From']    = addr_from
+msg['To']      = addr_to                            
+msg['Subject'] = 'Тема сообщения'                   
+body = "1234"
+msg.attach(MIMEText(body, 'plain')) 
+
+
+filepath="full_file_path_with_filename"                   
+filename = os.path.basename(filepath)                    
+
+if os.path.isfile(filepath):                              
+  ctype, encoding = mimetypes.guess_type(filepath)       
+  if ctype is None or encoding is not None:              
+      ctype = 'application/octet-stream'                  
+  maintype, subtype = ctype.split('/', 1)                 
+  if maintype == 'text':                                 
+      with open(filepath) as fp:                          
+          file = MIMEText(fp.read(), _subtype=subtype)    
+          fp.close()                                      
+  else:                                                   
+      with open(filepath, 'rb') as fp:
+          file = MIMEBase(maintype, subtype)              
+          file.set_payload(fp.read())                     
+          fp.close()
+      encoders.encode_base64(file)                        
+  file.add_header('Content-Disposition', 'attachment', filename=filename) 
+  msg.attach(file)                                        
+server = smtplib.SMTP('smtp.mail.ru:587')           
+server.set_debuglevel(True)                         # Включаем режим отладки - если отчет не нужен, строку можно закомментировать
+server.starttls()                                   
+server.login(addr_from, password)                   
+server.send_message(msg)                            
+server.quit()     
