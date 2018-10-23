@@ -7,5 +7,6 @@ schedule.crontab
 .DS_Store
 *.log
 *.csv
+*.xlsx
 __pycache__/
 /env/*
