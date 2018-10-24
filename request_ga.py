@@ -9,18 +9,17 @@ VIEW_ID = '181926962'
 
 
 def initialize_analyticsreporting():
-    '''инициализация api'''
+    # инициализация api
     credentials = ServiceAccountCredentials.from_json_keyfile_name(KEY_FILE_LOCATION, SCOPES)
-    '''cоздания объекта api'''
+    # cоздания объекта api
     analytics = build('analyticsreporting', 'v4', credentials=credentials)
     return analytics
 
 
 def get_report(analytics, url):
-    """формирование запроса в api"""
+    # формирование запроса в api
     try:
-        return analytics.reports().batchGet(
-        body={
+        return analytics.reports().batchGet(body={
             'reportRequests':
                 [
                     {
@@ -53,15 +52,13 @@ def get_report(analytics, url):
                             ]
                     }
                 ]
-         }
-         ).execute()
-        '''обработка ошибок'''
+         }).execute()
+        # обработка ошибок
     except TypeError as error:
         print('There was an error in constructing your query : %s' % error)
 
     except HttpError as error:
         print('There was an API error : %s : %s' % (error.resp.status, error.resp.reason))
-#    '''сделать исключение на выход за индекс IndexError и неверный ключ KeyError'''
 
 
 def main_ga(url):
@@ -70,6 +67,7 @@ def main_ga(url):
     k = int(response['reports'][0]['data']['totals'][0]['values'][0])
     return k
 
+
 if __name__ == '__main__':
-    l = main_ga('keune')
-    print(l)
+    main = main_ga('keune')
+    print(main)

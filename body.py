@@ -9,6 +9,13 @@ import openpyxl
 import request_ga
 import request_ym
 
+
+def request_all(url_template):
+    stat_g = request_ga.main_ga(url_template)
+    stat_y = request_ym.main_ym(url_template)
+    return stat_y, stat_g
+
+
 begin = datetime.today()
 # время запуска скрипта
 date = begin.strftime('%d.%m.%Y %H:%M')
@@ -23,20 +30,16 @@ with open('brand.txt', 'r', encoding='utf-8') as r:
     list_url = content.split('\n')
     print(list_url)
     # создание объекта Pool на несколько процессов
-    pool = Pool(processes=10)
-    # запрос к api ga с учетом мультипроцессинга
-    g = pool.map(request_ga.main_ga, list_url)
+    pool = Pool(processes=20)
+    # запрос к api ga и ym с учетом мультипроцессинга
+    res = pool.map(request_all, list_url)
     for url_idx, url in enumerate(list_url):
         # запись в словарь названия шаблона url и соответствующего значения по траифику из google за неделю
-        dict_res_g[url] = g[url_idx]
-        print(list_url[url_idx], 'g:', g[url_idx])
-    pool = Pool(processes=10)
-    # запрос к api ям с учетом мультипроцессинга
-    y = pool.map(request_ym.main_ym, list_url)
-    for url_idx, url in enumerate(list_url):
+        dict_res_g[url] = res[url_idx][1]
+        print(list_url[url_idx], 'g:', res[url_idx][1])
         # запись в словарь названия шаблона url и соответствующего значения по трафику из yandex за неделю
-        dict_res_y[url] = y[url_idx]
-        print(list_url[url_idx], 'y:', y[url_idx])
+        dict_res_y[url] = res[url_idx][0]
+        print(list_url[url_idx], 'y:', res[url_idx][0])
 print(dict_res_y)
 print(dict_res_g)
 # формирования списка полей из шаблонов url и даты запуска
