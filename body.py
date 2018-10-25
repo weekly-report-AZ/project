@@ -6,6 +6,7 @@ import os
 
 import openpyxl
 
+import mail
 import request_ga
 import request_ym
 
@@ -78,3 +79,4 @@ print(date_2)
 delta = end - begin
 # вывод длительности работы скрипта
 print('время работы скрипта {0} минут {1} секунд'.format(delta.seconds // 60, delta.seconds % 60))
+# mail.send_mail()
