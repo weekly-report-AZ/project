@@ -4,7 +4,7 @@ from googleapiclient.errors import HttpError
 from oauth2client.service_account import ServiceAccountCredentials
 
 SCOPES = ['https://www.googleapis.com/auth/analytics.readonly']
-KEY_FILE_LOCATION = '/Users/azuev/projects/weekly_report/weekly-report-218310-8e5d9c875c02.json'
+KEY_FILE_LOCATION = ''
 VIEW_ID = '181926962'
 
 
