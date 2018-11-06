@@ -10,10 +10,10 @@ def main_ym(key):
     s = requests.get(url)
     data = s.json()
     if not data['data']:
-        k = 0
+        result = 0
     else:
-        k = int(data["data"][0]['metrics'][0])
-    return k
+        result = int(data['data'][0]['metrics'][0])
+    return result
 
 
 if __name__ == '__main__':
