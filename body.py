@@ -24,6 +24,7 @@ def request_all(url_template):
         stat_y = request_ym.main_ym(url_template)
     return stat_y, stat_g
 
+
 time_begin = datetime.today()
 # время запуска скрипта
 time_begin_strf = time_begin.strftime('%d.%m.%Y %H:%M')
@@ -39,7 +40,7 @@ with open('url.txt', 'r', encoding='utf-8') as r:
     list_url = content.split('\n')
     print(list_url)
     # создание объекта Pool на несколько процессов
-    pool = Pool(processes=15)
+    pool = Pool(processes=30)
     # запрос к api ga и ym с учетом мультипроцессинга
     res = pool.map(request_all, list_url)
     for url_idx, url in enumerate(list_url):
