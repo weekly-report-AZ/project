@@ -1,8 +1,10 @@
 #!/Users/azuev/projects/weekly_report/env/bin/python3
 # -*- coding: utf-8 -*-
 from datetime import datetime
+from googleapiclient.errors import HttpError
 import mail
 from multiprocessing import Pool
+import time
 import os
 
 import openpyxl
@@ -12,10 +14,15 @@ import request_ym
 
 
 def request_all(url_template):
-    stat_g = request_ga.main_ga(url_template)
-    stat_y = request_ym.main_ym(url_template)
+    try:
+        stat_g = request_ga.main_ga(url_template)
+        stat_y = request_ym.main_ym(url_template)
+    except HttpError as error:
+        print('In request "{}" HttpError: {}'.format(url_template, error.resp.status))
+        time.sleep(5)
+        stat_g = request_ga.main_ga(url_template)
+        stat_y = request_ym.main_ym(url_template)
     return stat_y, stat_g
-
 
 time_begin = datetime.today()
 # время запуска скрипта
@@ -83,4 +90,4 @@ delta = time_end - time_begin
 # вывод длительности работы скрипта
 print('время работы скрипта {0} минут {1} секунд'.format(delta.seconds // 60, delta.seconds % 60))
 
-# mail.send_mail()
+mail.send_mail()
