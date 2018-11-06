@@ -1,9 +1,17 @@
 import dash
+<<<<<<< HEAD
 import xlrd
 from datetime import datetime
 import plotly.graph_objs as go
+=======
+import pandas as pd
+>>>>>>> 169af6e5dfcfb0dcf1b766ede2e9fc16db89eb30
 import dash_core_components as dcc
 import dash_html_components as html
+
+from datetime import datetime
+import plotly.graph_objs as go
+
 
 
 class Plot:

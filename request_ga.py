@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 from apiclient.discovery import build
-from googleapiclient.errors import HttpError
 from oauth2client.service_account import ServiceAccountCredentials
 
 SCOPES = ['https://www.googleapis.com/auth/analytics.readonly']
@@ -18,7 +17,6 @@ def initialize_analyticsreporting():
 
 def get_report(analytics, url):
     # формирование запроса в api
-    try:
         return analytics.reports().batchGet(body={
             'reportRequests':
                 [
@@ -53,12 +51,6 @@ def get_report(analytics, url):
                     }
                 ]
          }).execute()
-        # обработка ошибок
-    except TypeError as error:
-        print('There was an error in constructing your query : %s' % error)
-
-    except HttpError as error:
-        print('There was an API error : %s : %s' % (error.resp.status, error.resp.reason))
 
 
 def main_ga(url):

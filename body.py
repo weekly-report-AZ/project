@@ -1,8 +1,13 @@
 #!/Users/azuev/projects/weekly_report/env/bin/python3
 # -*- coding: utf-8 -*-
 from datetime import datetime
+<<<<<<< HEAD
+=======
+from googleapiclient.errors import HttpError
+>>>>>>> 169af6e5dfcfb0dcf1b766ede2e9fc16db89eb30
 import mail
 from multiprocessing import Pool
+import time
 import os
 
 import openpyxl
@@ -12,8 +17,14 @@ import request_ym
 
 
 def request_all(url_template):
-    stat_g = request_ga.main_ga(url_template)
-    stat_y = request_ym.main_ym(url_template)
+    try:
+        stat_g = request_ga.main_ga(url_template)
+        stat_y = request_ym.main_ym(url_template)
+    except HttpError as error:
+        print('In request "{}" HttpError: {}'.format(url_template, error.resp.status))
+        time.sleep(5)
+        stat_g = request_ga.main_ga(url_template)
+        stat_y = request_ym.main_ym(url_template)
     return stat_y, stat_g
 
 
@@ -32,7 +43,11 @@ with open('url.txt', 'r', encoding='utf-8') as r:
     list_url = content.split('\n')
     print(list_url)
     # создание объекта Pool на несколько процессов
+<<<<<<< HEAD
     pool = Pool(processes=15)
+=======
+    pool = Pool(processes=30)
+>>>>>>> 169af6e5dfcfb0dcf1b766ede2e9fc16db89eb30
     # запрос к api ga и ym с учетом мультипроцессинга
     res = pool.map(request_all, list_url)
     for url_idx, url in enumerate(list_url):
