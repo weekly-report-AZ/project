@@ -3,7 +3,7 @@
    pip install dash==0.28.5
    pip install dash-html-components==0.13.2
    pip install dash-core-components==0.34.0
-   pip install pandas
+   pip install xlrd
 
 2. Запуск скрипта:
 

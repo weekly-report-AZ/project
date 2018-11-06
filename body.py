@@ -49,7 +49,7 @@ list_url_with_date = list_url_with_date + list_url
 len_list = len(list_url_with_date)
 
 # если файл отчета еще не существует, то создаем report.xlsx записываем результаты в 2 вкладки
-if os.path.isfile('/Users/azuev/projects/weekly_report/report.xlsx') is False:
+if os.path.isfile('report.xlsx') is False:
     workbook = openpyxl.Workbook()
     worksheet_y = workbook.active
     worksheet_y.title = 'Yandex'
@@ -83,4 +83,4 @@ delta = time_end - time_begin
 # вывод длительности работы скрипта
 print('время работы скрипта {0} минут {1} секунд'.format(delta.seconds // 60, delta.seconds % 60))
 
-# mail.send_mail()
+mail.send_mail()
