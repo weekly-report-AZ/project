@@ -40,7 +40,7 @@ with open('url.txt', 'r', encoding='utf-8') as r:
     list_url = content.split('\n')
     print(list_url)
     # создание объекта Pool на несколько процессов
-    pool = Pool(processes=30)
+    pool = Pool(processes=15)
     # запрос к api ga и ym с учетом мультипроцессинга
     res = pool.map(request_all, list_url)
     for url_idx, url in enumerate(list_url):

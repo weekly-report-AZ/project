@@ -1,25 +1,31 @@
-import dash
-import pandas as pd
-import dash_core_components as dcc
-import dash_html_components as html
-
 from datetime import datetime
 import plotly.graph_objs as go
 
+import dash
+import dash_core_components as dcc
+import dash_html_components as html
+import xlrd
 
 
 class Plot:
     def __init__(self):
-        self.ga_data = pd.read_csv("report_g.csv", sep=';')
-        self.ym_data = pd.read_csv("report_y.csv", sep=';')
+        self.work_book = xlrd.open_workbook("report.xlsx")
+        self.yandex_sheet = self.work_book.sheet_by_name('Yandex')
+        self.google_sheet = self.work_book.sheet_by_name('Google')
 
-        self.sites = list(self.ga_data.columns)
+        self.sites = [e.value for e in self.yandex_sheet.row(0)]
         self.sites.remove('date')
 
         external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
         self.app = dash.Dash(__name__,
                              external_stylesheets=external_stylesheets)
+
+        gx_axis = [datetime.strptime(self.google_sheet.row(v)[0].value, '%d.%m.%Y %H:%M')
+                   for v in range(1, self.google_sheet.nrows)]
+
+        yx_axis = [datetime.strptime(self.yandex_sheet.row(v)[0].value, '%d.%m.%Y %H:%M')
+                   for v in range(1, self.yandex_sheet.nrows)]
 
         self.app.layout = html.Div(
             [
@@ -39,9 +45,8 @@ class Plot:
                     figure=go.Figure(
                         data=[
                             go.Scatter(
-                                x=[datetime.strptime(d, '%d.%m.%Y %H:%M')
-                                   for d in self.ga_data.date],
-                                y=self.ga_data[v],
+                                x=gx_axis,
+                                y=[int(f) for f in self.google_sheet.col_values(self.sites.index(v) + 1)[1:]],
                                 name=v
                             ) for v in self.sites
                         ],
@@ -59,9 +64,9 @@ class Plot:
                     figure=go.Figure(
                         data=[
                             go.Scatter(
-                                x=[datetime.strptime(d, '%d.%m.%Y %H:%M')
-                                   for d in self.ym_data.date],
-                                y=self.ym_data[v],
+                                x=yx_axis,
+                                y=[int(f) for f in self.yandex_sheet.col_values(
+                                    self.sites.index(v) + 1)[1:]],
                                 name=v
                             ) for v in self.sites
                         ],
@@ -86,17 +91,16 @@ class Plot:
             if value:
                 data = [
                    go.Scatter(
-                       x=[datetime.strptime(d, '%d.%m.%Y %H:%M')
-                          for d in self.ga_data.date],
-                       y=self.ga_data[v],
+                       x=yx_axis,
+                       y=[int(f) for f in self.google_sheet.col_values(
+                                    self.sites.index(v) + 1)[1:]],
                        name=v
                     ) for v in value
                 ]
             else:
                 data = [
                     go.Scatter(
-                        x=[datetime.strptime(d, '%d.%m.%Y %H:%M')
-                           for d in self.ga_data.date],
+                        x=gx_axis,
                         y=[]
                     )
                 ]
@@ -117,17 +121,16 @@ class Plot:
             if value:
                 data = [
                     go.Scatter(
-                        x=[datetime.strptime(d, '%d.%m.%Y %H:%M')
-                           for d in self.ym_data.date],
-                        y=self.ym_data[v],
+                        x=yx_axis,
+                        y=[int(f) for f in self.yandex_sheet.col_values(
+                                    self.sites.index(v) + 1)[1:]],
                         name=v
                     ) for v in value
                 ]
             else:
                 data = [
                     go.Scatter(
-                        x=[datetime.strptime(d, '%d.%m.%Y %H:%M')
-                           for d in self.ym_data.date],
+                        x=yx_axis,
                         y=[]
                     )
                 ]
@@ -151,10 +154,9 @@ class Plot:
             dash.dependencies.Output('my-dropdown', 'value'),
             [dash.dependencies.Input('button', 'n_clicks')])
         def update_a_to_default(clicks):
-            self.ga_data = pd.read_csv("report_g.csv", sep=';')
-            self.ym_data = pd.read_csv("report_y.csv", sep=';')
+            self.work_book = xlrd.open_workbook("report.xlsx")
 
-            self.sites = list(self.ga_data.columns)
+            self.sites = [e.value for e in self.yandex_sheet.row(0)]
             self.sites.remove('date')
             return self.sites
 
