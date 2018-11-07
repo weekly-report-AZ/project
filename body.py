@@ -41,8 +41,6 @@ with open('url.txt', 'r', encoding='utf-8') as r:
     print(list_url)
     # создание объекта Pool на несколько процессов
     pool = Pool(processes=15)
-    pool = Pool(processes=15)
-    pool = Pool(processes=30)
     # запрос к api ga и ym с учетом мультипроцессинга
     res = pool.map(request_all, list_url)
     for url_idx, url in enumerate(list_url):
@@ -59,7 +57,7 @@ list_url_with_date = list_url_with_date + list_url
 len_list = len(list_url_with_date)
 
 # если файл отчета еще не существует, то создаем report.xlsx записываем результаты в 2 вкладки
-if os.path.isfile('report.xlsx') is False:
+if os.path.isfile('/Users/azuev/projects/weekly_report/report.xlsx') is False:
     workbook = openpyxl.Workbook()
     worksheet_y = workbook.active
     worksheet_y.title = 'Yandex'
