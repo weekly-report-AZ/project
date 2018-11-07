@@ -91,4 +91,4 @@ delta = time_end - time_begin
 # вывод длительности работы скрипта
 print('время работы скрипта {0} минут {1} секунд'.format(delta.seconds // 60, delta.seconds % 60))
 
-mail.send_mail()
+# mail.send_mail()
